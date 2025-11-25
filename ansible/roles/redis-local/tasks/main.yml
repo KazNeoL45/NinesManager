@@ -1,0 +1,25 @@
+---
+- name: Install Redis
+  apt:
+    name:
+      - redis-server
+      - redis-tools
+    state: present
+
+- name: Configure Redis
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regexp: '^bind', line: 'bind 127.0.0.1' }
+    - { regexp: '^port', line: 'port 6379' }
+    - { regexp: '^# maxmemory ', line: 'maxmemory 256mb' }
+    - { regexp: '^# maxmemory-policy', line: 'maxmemory-policy allkeys-lru' }
+  notify: restart redis
+
+- name: Ensure Redis is started and enabled
+  systemd:
+    name: redis-server
+    state: started
+    enabled: yes

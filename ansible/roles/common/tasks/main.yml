@@ -1,0 +1,89 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install common packages
+  apt:
+    name:
+      - git
+      - curl
+      - wget
+      - vim
+      - htop
+      - build-essential
+      - libssl-dev
+      - libreadline-dev
+      - zlib1g-dev
+      - libpq-dev
+      - libyaml-dev
+      - libffi-dev
+      - libgdbm-dev
+      - libncurses5-dev
+      - automake
+      - libtool
+      - bison
+      - pkg-config
+      - libgmp-dev
+      - libcurl4-openssl-dev
+      - nodejs
+      - npm
+    state: present
+
+- name: Create deploy user
+  user:
+    name: "{{ app_user }}"
+    groups: sudo
+    shell: /bin/bash
+    createhome: yes
+
+- name: Create application directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0755'
+  loop:
+    - "{{ app_path }}"
+    - "{{ app_path }}/releases"
+    - "{{ shared_path }}"
+    - "{{ shared_path }}/config"
+    - "{{ shared_path }}/log"
+    - "{{ shared_path }}/tmp"
+    - "{{ shared_path }}/tmp/pids"
+    - "{{ shared_path }}/tmp/sockets"
+    - "{{ shared_path }}/public"
+    - "{{ shared_path }}/public/uploads"
+
+- name: Configure SSH
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regexp: '^PasswordAuthentication', line: 'PasswordAuthentication no' }
+    - { regexp: '^PermitRootLogin', line: 'PermitRootLogin no' }
+    - { regexp: '^X11Forwarding', line: 'X11Forwarding no' }
+  notify: restart sshd
+
+- name: Configure firewall
+  ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  loop:
+    - { rule: 'allow', port: '22', proto: 'tcp' }
+    - { rule: 'allow', port: '80', proto: 'tcp' }
+    - { rule: 'allow', port: '443', proto: 'tcp' }
+
+- name: Enable firewall
+  ufw:
+    state: enabled
+
+- name: Configure log rotation
+  template:
+    src: logrotate.j2
+    dest: /etc/logrotate.d/ninesmanager
+    mode: '0644'

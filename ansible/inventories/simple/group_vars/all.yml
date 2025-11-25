@@ -1,0 +1,31 @@
+---
+environment: simple
+project_name: ninesmanager
+
+ruby_version: "3.3.0"
+rails_env: "production"
+
+app_user: deploy
+app_group: deploy
+app_path: "/var/www/{{ project_name }}"
+shared_path: "{{ app_path }}/shared"
+current_path: "{{ app_path }}/current"
+
+nginx_worker_processes: auto
+nginx_worker_connections: 1024
+
+puma_workers: 2
+puma_threads_min: 5
+puma_threads_max: 5
+puma_port: 3000
+
+log_retention_days: 30
+
+db_name: "ninesmanager_production"
+db_user: "ninesmanager"
+db_password: "{{ vault_db_password | default('changeme') }}"
+
+database_url: "postgresql://{{ db_user }}:{{ db_password }}@localhost:5432/{{ db_name }}"
+redis_url: "redis://localhost:6379/0"
+
+secret_key_base: "{{ vault_secret_key_base | default('') }}"

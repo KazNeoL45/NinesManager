@@ -1,0 +1,8 @@
+---
+- name: Configure NinesManager infrastructure
+  hosts: web
+  become: yes
+  roles:
+    - common
+    - rails
+    - nginx

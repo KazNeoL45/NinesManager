@@ -1,0 +1,11 @@
+{{ shared_path }}/log/*.log {
+    daily
+    missingok
+    rotate {{ log_retention_days }}
+    compress
+    delaycompress
+    notifempty
+    copytruncate
+    dateext
+    dateformat -%Y%m%d
+}

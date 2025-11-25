@@ -1,0 +1,23 @@
+[Unit]
+Description=Puma HTTP Server for {{ project_name }}
+After=network.target
+
+[Service]
+Type=simple
+User={{ app_user }}
+WorkingDirectory={{ current_path }}
+
+Environment=RAILS_ENV={{ rails_env }}
+EnvironmentFile={{ shared_path }}/config/application.env
+
+ExecStart=/home/{{ app_user }}/.rbenv/shims/bundle exec puma -C config/puma.rb
+ExecReload=/bin/kill -USR2 $MAINPID
+
+Restart=always
+RestartSec=10
+
+StandardOutput=append:{{ shared_path }}/log/puma.stdout.log
+StandardError=append:{{ shared_path }}/log/puma.stderr.log
+
+[Install]
+WantedBy=multi-user.target

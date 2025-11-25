@@ -1,0 +1,30 @@
+---
+environment: production
+project_name: ninesmanager
+
+ruby_version: "3.3.0"
+rails_env: "{{ environment }}"
+
+app_user: deploy
+app_group: deploy
+app_path: "/var/www/{{ project_name }}"
+shared_path: "{{ app_path }}/shared"
+current_path: "{{ app_path }}/current"
+
+nginx_worker_processes: auto
+nginx_worker_connections: 1024
+
+puma_workers: 4
+puma_threads_min: 5
+puma_threads_max: 5
+puma_port: 3000
+
+log_retention_days: 30
+
+database_url: "{{ vault_database_url | default('') }}"
+redis_url: "{{ vault_redis_url | default('') }}"
+secret_key_base: "{{ vault_secret_key_base | default('') }}"
+aws_access_key_id: "{{ vault_aws_access_key_id | default('') }}"
+aws_secret_access_key: "{{ vault_aws_secret_access_key | default('') }}"
+s3_bucket_name: "{{ vault_s3_bucket_name | default('') }}"
+aws_region: "{{ vault_aws_region | default('us-east-1') }}"

@@ -1,0 +1,10 @@
+---
+- name: Configure NinesManager on single EC2 instance
+  hosts: all
+  become: yes
+  roles:
+    - common
+    - postgresql
+    - redis-local
+    - rails
+    - nginx

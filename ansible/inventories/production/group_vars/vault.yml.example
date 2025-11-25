@@ -1,0 +1,10 @@
+vault_database_url: "postgresql://ninesmanager:CHANGE-ME@rds-endpoint:5432/ninesmanager_production"
+vault_redis_url: "redis://redis-endpoint:6379/0"
+vault_secret_key_base: "CHANGE-ME-SECRET-KEY-BASE"
+vault_aws_access_key_id: "AKIA..."
+vault_aws_secret_access_key: "CHANGE-ME"
+vault_s3_bucket_name: "ninesmanager-production-assets"
+vault_aws_region: "us-east-1"
+
+git_repository: "git@github.com:user/ninesmanager.git"
+git_branch: "main"
