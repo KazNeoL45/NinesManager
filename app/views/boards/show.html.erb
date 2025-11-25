@@ -1,0 +1,203 @@
+<div class="space-y-6">
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="text-3xl font-semibold text-gray-900"><%= @board.name %></h1>
+      <p class="text-gray-600 mt-1"><%= link_to @project.name, @project, class: "hover:text-indigo-600" %></p>
+    </div>
+    <div class="flex space-x-2">
+      <button onclick="openColumnModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Add Column</button>
+      <%= link_to "Back to Project", @project, class: "px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition" %>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto pb-4">
+    <div class="flex space-x-4 min-w-max">
+      <% @columns.each do |column| %>
+        <div class="flex-shrink-0 w-80">
+          <div class="bg-gray-100 rounded-lg">
+            <div class="p-4 border-b border-gray-200">
+              <div class="flex justify-between items-center">
+                <h3 class="font-semibold text-gray-900"><%= column.name %></h3>
+                <span class="text-sm text-gray-500"><%= column.tasks.count %></span>
+              </div>
+            </div>
+            <div class="p-4 space-y-3 min-h-[200px]" data-column-id="<%= column.id %>">
+              <% column.tasks.each do |task| %>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition cursor-move" data-task-id="<%= task.id %>" draggable="true">
+                  <div class="font-medium text-gray-900 mb-2"><%= task.title %></div>
+                  <% if task.description.present? %>
+                    <p class="text-sm text-gray-600 mb-3"><%= truncate(task.description, length: 80) %></p>
+                  <% end %>
+                  <div class="flex justify-between items-center">
+                    <span class="px-2 py-1 text-xs font-medium rounded <%= task.priority == 'urgent' ? 'bg-red-100 text-red-800' : task.priority == 'high' ? 'bg-orange-100 text-orange-800' : task.priority == 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' %>">
+                      <%= task.priority %>
+                    </span>
+                    <% if task.due_date %>
+                      <span class="text-xs text-gray-500"><%= task.due_date.strftime('%b %d') %></span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+              <%= link_to new_project_task_path(@project, column_id: column.id), class: "block p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500 hover:border-gray-400 hover:text-gray-600 transition" do %>
+                + Add Task
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div id="columnModal" class="modal-overlay hidden">
+  <div class="modal-container">
+    <div class="modal-content">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-semibold text-gray-900">Add New Column</h2>
+        <button onclick="closeColumnModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <%= form_with(model: [@project, @board, @board.columns.build], url: project_board_columns_path(@project, @board), method: :post, class: "space-y-5") do |form| %>
+        <div>
+          <%= form.label :name, "Column Name", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.text_field :name, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200", placeholder: "e.g., To Do, In Progress, Done" %>
+        </div>
+
+        <div class="flex space-x-3 pt-4">
+          <button type="button" onclick="closeColumnModal()" class="flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200">
+            Cancel
+          </button>
+          <%= form.submit "Create Column", class: "flex-1 px-6 py-3 font-semibold rounded-xl cursor-pointer", style: "background-color: rgb(79, 70, 229); color: white;" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 1rem;
+  }
+
+  .modal-overlay.hidden {
+    display: none;
+  }
+
+  .modal-container {
+    width: 100%;
+    max-width: 32rem;
+  }
+
+  .modal-content {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+</style>
+
+<script>
+  document.addEventListener('turbo:load', () => {
+    const draggables = document.querySelectorAll('[draggable="true"]');
+    const columns = document.querySelectorAll('[data-column-id]');
+
+    draggables.forEach(draggable => {
+      draggable.addEventListener('dragstart', () => {
+        draggable.classList.add('opacity-50');
+      });
+
+      draggable.addEventListener('dragend', () => {
+        draggable.classList.remove('opacity-50');
+      });
+    });
+
+    columns.forEach(column => {
+      column.addEventListener('dragover', e => {
+        e.preventDefault();
+        const afterElement = getDragAfterElement(column, e.clientY);
+        const draggable = document.querySelector('.opacity-50');
+        if (afterElement == null) {
+          column.appendChild(draggable);
+        } else {
+          column.insertBefore(draggable, afterElement);
+        }
+      });
+
+      column.addEventListener('drop', e => {
+        e.preventDefault();
+        const draggable = document.querySelector('.opacity-50');
+        const taskId = draggable.dataset.taskId;
+        const columnId = column.dataset.columnId;
+
+        fetch(`/projects/<%= @project.id %>/tasks/${taskId}/move`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+          },
+          body: JSON.stringify({ column_id: columnId })
+        });
+      });
+    });
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('[draggable="true"]:not(.opacity-50)')];
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+  });
+
+  function openColumnModal() {
+    const modal = document.getElementById('columnModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeColumnModal() {
+    const modal = document.getElementById('columnModal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+  }
+
+  // Close modal when clicking outside
+  document.addEventListener('turbo:load', () => {
+    const modal = document.getElementById('columnModal');
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeColumnModal();
+        }
+      });
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeColumnModal();
+      }
+    });
+  });
+</script>

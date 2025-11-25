@@ -1,0 +1,52 @@
+<div class="max-w-4xl">
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+    <div class="flex justify-between items-start mb-6">
+      <div class="flex-1">
+        <h1 class="text-3xl font-semibold text-gray-900 mb-2"><%= @task.title %></h1>
+        <p class="text-gray-600"><%= link_to @project.name, @project, class: "hover:text-indigo-600" %></p>
+      </div>
+      <div class="flex space-x-2">
+        <%= link_to "Edit", edit_project_task_path(@project, @task), class: "px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition" %>
+        <%= button_to "Delete", project_task_path(@project, @task), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-4 py-2 text-red-700 bg-white border border-red-300 rounded-lg hover:bg-red-50 transition" %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-6 mb-6">
+      <div>
+        <div class="text-sm font-medium text-gray-500 mb-1">Priority</div>
+        <span class="px-3 py-1 text-sm font-medium rounded <%= @task.priority == 'urgent' ? 'bg-red-100 text-red-800' : @task.priority == 'high' ? 'bg-orange-100 text-orange-800' : @task.priority == 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' %>">
+          <%= @task.priority.capitalize %>
+        </span>
+      </div>
+      <div>
+        <div class="text-sm font-medium text-gray-500 mb-1">Status</div>
+        <span class="px-3 py-1 text-sm font-medium rounded bg-blue-100 text-blue-800">
+          <%= @task.status.humanize %>
+        </span>
+      </div>
+      <% if @task.due_date %>
+        <div>
+          <div class="text-sm font-medium text-gray-500 mb-1">Due Date</div>
+          <div class="text-gray-900"><%= @task.due_date.strftime('%B %d, %Y') %></div>
+        </div>
+      <% end %>
+      <% if @task.user %>
+        <div>
+          <div class="text-sm font-medium text-gray-500 mb-1">Assigned To</div>
+          <div class="text-gray-900"><%= @task.user.name %></div>
+        </div>
+      <% end %>
+    </div>
+
+    <% if @task.description.present? %>
+      <div>
+        <div class="text-sm font-medium text-gray-500 mb-2">Description</div>
+        <div class="prose max-w-none text-gray-900"><%= simple_format(@task.description) %></div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-6">
+    <%= link_to "Back to Project", @project, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+  </div>
+</div>

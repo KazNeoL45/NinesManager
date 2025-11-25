@@ -1,0 +1,24 @@
+<div class="max-w-4xl">
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+    <div class="flex justify-between items-start mb-6">
+      <div class="flex-1">
+        <h1 class="text-3xl font-semibold text-gray-900 mb-2"><%= @document.title %></h1>
+        <p class="text-sm text-gray-600">
+          Created by <%= @document.user.name %> on <%= @document.created_at.strftime('%B %d, %Y') %>
+        </p>
+      </div>
+      <div class="flex space-x-2">
+        <%= link_to "Edit", edit_project_document_path(@project, @document), class: "px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition" %>
+        <%= button_to "Delete", project_document_path(@project, @document), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-4 py-2 text-red-700 bg-white border border-red-300 rounded-lg hover:bg-red-50 transition" %>
+      </div>
+    </div>
+
+    <div class="prose max-w-none">
+      <%= simple_format(@document.content) %>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <%= link_to "Back to Project", @project, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+  </div>
+</div>
