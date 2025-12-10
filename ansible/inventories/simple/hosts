@@ -1,9 +1,0 @@
-[all]
-44.193.253.78
-
-[all:vars]
-ansible_user=ubuntu
-ansible_ssh_private_key_file=~/.ssh/ninesmanager-simple.pem
-ansible_python_interpreter=/usr/bin/python3
-environment=simple
-project_name=ninesmanager

@@ -1,0 +1,124 @@
+<div class="max-w-6xl mx-auto">
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-900">Settings</h1>
+    <p class="text-gray-600 mt-1">Manage your application settings and preferences</p>
+  </div>
+
+  <div class="grid gap-6">
+    <!-- Account Settings -->
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+      <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-900">Account Settings</h2>
+      </div>
+      <div class="px-6 py-4 space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-medium text-gray-900">Profile</h3>
+            <p class="text-sm text-gray-600">Update your personal information</p>
+          </div>
+          <%= link_to "Edit Profile", edit_user_registration_path, class: "px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors" %>
+        </div>
+
+        <div class="border-t border-gray-200 pt-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-medium text-gray-900">Email</h3>
+              <p class="text-sm text-gray-600"><%= current_user.email %></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-medium text-gray-900">Role</h3>
+              <p class="text-sm text-gray-600 capitalize"><%= current_user.role %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Info -->
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+      <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-900">Application Information</h2>
+      </div>
+      <div class="px-6 py-4 space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <h3 class="font-medium text-gray-900">Version</h3>
+            <p class="text-sm text-gray-600"><%= NinesManager::Application.version %></p>
+          </div>
+          <div>
+            <h3 class="font-medium text-gray-900">Status</h3>
+            <div class="mt-1">
+              <%= system_status_badge %>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-medium text-gray-900">Environment</h3>
+            <p class="text-sm text-gray-600 capitalize"><%= Rails.env %></p>
+          </div>
+          <div>
+            <h3 class="font-medium text-gray-900">Database</h3>
+            <p class="text-sm text-gray-600"><%= ActiveRecord::Base.connection.adapter_name %></p>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-medium text-gray-900">About Nines Manager</h3>
+              <p class="text-sm text-gray-600">Learn more about this application</p>
+            </div>
+            <%= link_to "View About", about_path, class: "px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+      <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-900">Projects</h2>
+      </div>
+      <div class="px-6 py-4 space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-medium text-gray-900">Owned Projects</h3>
+            <p class="text-sm text-gray-600"><%= current_user.owned_projects.count %> projects</p>
+          </div>
+          <%= link_to "View Projects", projects_path, class: "px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors" %>
+        </div>
+
+        <div class="border-t border-gray-200 pt-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-medium text-gray-900">Member Projects</h3>
+              <p class="text-sm text-gray-600"><%= current_user.projects.count %> projects</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden border-2 border-red-200">
+      <div class="px-6 py-4 bg-red-50 border-b border-red-200">
+        <h2 class="text-xl font-semibold text-red-900">Danger Zone</h2>
+      </div>
+      <div class="px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-medium text-gray-900">Delete Account</h3>
+            <p class="text-sm text-gray-600">Permanently delete your account and all associated data</p>
+          </div>
+          <%= button_to "Delete Account", registration_path(current_user), method: :delete,
+              data: { turbo_confirm: "Are you sure? This action cannot be undone." },
+              class: "px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

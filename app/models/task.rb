@@ -3,9 +3,11 @@ class Task < ApplicationRecord
   belongs_to :column, optional: true
   belongs_to :user, optional: true
 
+  PRIORITIES = %w[low medium high urgent]
+
   validates :title, presence: true
   validates :status, inclusion: { in: %w[todo in_progress done] }, allow_blank: true
-  validates :priority, inclusion: { in: %w[low medium high urgent] }, allow_blank: true
+  validates :priority, inclusion: { in: PRIORITIES }, allow_blank: true
 
   before_validation :set_defaults, on: :create
 

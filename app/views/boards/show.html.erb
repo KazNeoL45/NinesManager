@@ -23,20 +23,7 @@
             </div>
             <div class="p-4 space-y-3 min-h-[200px]" data-column-id="<%= column.id %>">
               <% column.tasks.each do |task| %>
-                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition cursor-move" data-task-id="<%= task.id %>" draggable="true">
-                  <div class="font-medium text-gray-900 mb-2"><%= task.title %></div>
-                  <% if task.description.present? %>
-                    <p class="text-sm text-gray-600 mb-3"><%= truncate(task.description, length: 80) %></p>
-                  <% end %>
-                  <div class="flex justify-between items-center">
-                    <span class="px-2 py-1 text-xs font-medium rounded <%= task.priority == 'urgent' ? 'bg-red-100 text-red-800' : task.priority == 'high' ? 'bg-orange-100 text-orange-800' : task.priority == 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' %>">
-                      <%= task.priority %>
-                    </span>
-                    <% if task.due_date %>
-                      <span class="text-xs text-gray-500"><%= task.due_date.strftime('%b %d') %></span>
-                    <% end %>
-                  </div>
-                </div>
+                <%= render 'boards/task_card', task: task, project: @project %>
               <% end %>
               <%= link_to new_project_task_path(@project, column_id: column.id), class: "block p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500 hover:border-gray-400 hover:text-gray-600 transition" do %>
                 + Add Task
@@ -120,27 +107,9 @@
 
       draggable.addEventListener('dragend', () => {
         draggable.classList.remove('opacity-50');
-      });
-    });
-
-    columns.forEach(column => {
-      column.addEventListener('dragover', e => {
-        e.preventDefault();
-        const afterElement = getDragAfterElement(column, e.clientY);
-        const draggable = document.querySelector('.opacity-50');
-        if (afterElement == null) {
-          column.appendChild(draggable);
-        } else {
-          column.insertBefore(draggable, afterElement);
-        }
-      });
-
-      column.addEventListener('drop', e => {
-        e.preventDefault();
-        const draggable = document.querySelector('.opacity-50');
         const taskId = draggable.dataset.taskId;
-        const columnId = column.dataset.columnId;
-
+        const columnId = draggable.closest('[data-column-id]').dataset.columnId;
+        
         fetch(`/projects/<%= @project.id %>/tasks/${taskId}/move`, {
           method: 'PATCH',
           headers: {
@@ -152,6 +121,21 @@
       });
     });
 
+    columns.forEach(column => {
+      column.addEventListener('dragover', e => {
+        e.preventDefault();
+        const afterElement = getDragAfterElement(column, e.clientY);
+        const draggable = document.querySelector('.opacity-50');
+        if (draggable) {
+            if (afterElement == null) {
+              column.appendChild(draggable);
+            } else {
+              column.insertBefore(draggable, afterElement);
+            }
+        }
+      });
+    });
+
     function getDragAfterElement(container, y) {
       const draggableElements = [...container.querySelectorAll('[draggable="true"]:not(.opacity-50)')];
       return draggableElements.reduce((closest, child) => {
@@ -160,12 +144,12 @@
         if (offset < 0 && offset > closest.offset) {
           return { offset: offset, element: child };
         } else {
-          return closest;
+          return closest
         }
       }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
   });
-
+  
   function openColumnModal() {
     const modal = document.getElementById('columnModal');
     if (modal) {
@@ -182,7 +166,6 @@
     }
   }
 
-  // Close modal when clicking outside
   document.addEventListener('turbo:load', () => {
     const modal = document.getElementById('columnModal');
     if (modal) {
@@ -193,7 +176,6 @@
       });
     }
 
-    // Close modal with Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeColumnModal();
