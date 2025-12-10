@@ -1,0 +1,20 @@
+<div id="editTaskModal" class="modal-overlay hidden" 
+     data-controller="modal" 
+     data-modal-target="overlay"
+     data-action="keydown@window->modal#closeWithKeyboard click->modal#closeBackground">
+  <div class="modal-container">
+    <div class="modal-content">
+      <div class="flex items-center justify-between mb-6 border-b pb-3">
+        <h2 class="text-2xl font-semibold text-gray-900">Editing: <%= task.title %></h2>
+        <button data-action="click->modal#close" class="text-gray-400 hover:text-gray-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <%= render 'tasks/form', task: task %>
+
+    </div>
+  </div>
+</div>

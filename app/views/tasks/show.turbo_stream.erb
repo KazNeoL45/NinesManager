@@ -1,0 +1,2 @@
+<%= turbo_stream.remove "taskModal" %>
+<%= turbo_stream.append "modals", partial: "tasks/task_modal", locals: { task: @task, project: @project } %>

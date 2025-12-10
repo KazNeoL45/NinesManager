@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   root 'pages#home'
 
   resource :dashboard, only: [:show], controller: 'dashboard'
+  get 'settings', to: 'settings#index', as: :settings
+  get 'about', to: 'pages#about', as: :about
 
   resources :projects do
     resources :tasks do

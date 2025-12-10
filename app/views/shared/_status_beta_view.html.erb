@@ -1,0 +1,18 @@
+<div id="status-container"
+     class="flex items-center space-x-2 py-1.5 px-4 rounded-full
+            border-2 shadow-sm
+            transition-all duration-300 transform hover:scale-105
+            <%= local_assigns[:container_class] %>" >
+
+    <!-- Status Dot -->
+    <div id="status-dot"
+         class="w-2.5 h-2.5 rounded-full transition-colors duration-300
+                <%= local_assigns[:dot_class] %>">
+    </div>
+
+    <span id="status-text"
+          class="text-xs font-semibold uppercase tracking-wide transition-colors duration-300
+                 <%= local_assigns[:text_class] %>">
+        <%= local_assigns[:user_status] %>
+    </span>
+</div>

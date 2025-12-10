@@ -7,6 +7,10 @@ class TasksController < ApplicationController
   end
 
   def show
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   def new
@@ -23,14 +27,21 @@ class TasksController < ApplicationController
     end
   end
 
-  def edit
+def edit
+    respond_to do |format|
+    format.html
+    format.turbo_stream 
   end
+end
 
   def update
     if @task.update(task_params)
-      redirect_to project_task_path(@project, @task), notice: 'Task updated successfully.'
+      redirect_to project_board_path(@project, @task.column.board), notice: 'Task updated successfully.'
     else
-      render :edit, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { render :edit, status: :unprocessable_entity }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("editTaskModal", partial: "form", locals: { project: @project, task: @task }) }
+      end
     end
   end
 

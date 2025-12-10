@@ -1,0 +1,107 @@
+<div class="max-w-4xl mx-auto">
+  <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-8 text-white">
+      <h1 class="text-3xl font-bold mb-2">About Nines Manager</h1>
+      <p class="text-indigo-100">Project Management Made Simple</p>
+    </div>
+
+    <!-- Content -->
+    <div class="px-6 py-8 space-y-8">
+      <!-- Version Info -->
+      <div class="border-l-4 border-indigo-500 pl-4">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Version Information</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-gray-600">Version</p>
+            <p class="text-lg font-semibold text-gray-900"><%= @version %></p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Status</p>
+            <div class="mt-1">
+              <%= system_status_badge %>
+            </div>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Environment</p>
+            <p class="text-lg font-semibold text-gray-900 capitalize"><%= Rails.env %></p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Ruby Version</p>
+            <p class="text-lg font-semibold text-gray-900"><%= RUBY_VERSION %></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Section -->
+      <div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">About</h2>
+        <div class="prose max-w-none text-gray-600">
+          <p class="mb-4">
+            Nines Manager is a comprehensive project management platform designed to help teams
+            collaborate effectively and deliver high-quality results. Our platform provides
+            intuitive tools for project planning, task management, and team collaboration.
+          </p>
+          <p>
+            Built with modern web technologies, Nines Manager focuses on simplicity and
+            performance to ensure your team can focus on what matters most - getting work done.
+          </p>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Key Features</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="flex items-start space-x-3">
+            <svg class="w-6 h-6 text-indigo-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-gray-900">Project Management</h3>
+              <p class="text-sm text-gray-600">Organize and track multiple projects with ease</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <svg class="w-6 h-6 text-indigo-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-gray-900">Task Boards</h3>
+              <p class="text-sm text-gray-600">Visualize workflows with Kanban-style boards</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <svg class="w-6 h-6 text-indigo-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-gray-900">Team Collaboration</h3>
+              <p class="text-sm text-gray-600">Work together with role-based access control</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <svg class="w-6 h-6 text-indigo-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-gray-900">Document Management</h3>
+              <p class="text-sm text-gray-600">Store and share project documents centrally</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech Stack -->
+      <div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Built With</h2>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">Ruby on Rails <%= Rails::VERSION::STRING %></span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">Tailwind CSS</span>
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">Turbo</span>
+          <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">SQLite</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

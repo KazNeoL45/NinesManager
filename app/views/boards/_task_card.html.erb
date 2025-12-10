@@ -1,0 +1,22 @@
+<%= link_to project_task_path(project, task), data: { turbo_frame: "modals" } do %>
+  <div id="<%= dom_id(task) %>" 
+       class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition cursor-pointer" 
+       data-task-id="<%= task.id %>" 
+       draggable="true">
+    
+    <div class="font-medium text-gray-900 mb-2"><%= task.title %></div>
+    
+    <% if task.description.present? %>
+      <p class="text-sm text-gray-600 mb-3"><%= truncate(task.description, length: 80) %></p>
+    <% end %>
+    
+    <div class="flex justify-between items-center">
+      <span class="px-2 py-1 text-xs font-medium rounded <%= task.priority == 'urgent' ? 'bg-red-100 text-red-800' : task.priority == 'high' ? 'bg-orange-100 text-orange-800' : task.priority == 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' %>">
+        <%= task.priority %>
+      </span>
+      <% if task.due_date %>
+        <span class="text-xs text-gray-500"><%= task.due_date.strftime('%b %d') %></span>
+      <% end %>
+    </div>
+  </div>
+<% end %>
