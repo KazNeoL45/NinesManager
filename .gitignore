@@ -39,3 +39,16 @@ secrets/
 # Backups
 *.backup
 *.bak
+*.cache
+
+/app/assets/builds/*
+/app/tmp/*
+!/app/assets/builds/.keep
+storage/*.sqlite3
+storage/*.sqlite3-*
+
+tmp/*
+!tmp/.keep
+tmp/cache/assets/
+tmp/cache/bootsnap/
+tmp/pids/server.pid
