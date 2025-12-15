@@ -7,22 +7,25 @@
   <div class="modal-container">
     <div class="modal-content rounded-3xl p-10 space-y-8">
 
-      <div class="flex items-center justify-between border-b border-gray-200 pb-4">
-        <div class="space-y-1">
-          <p class="text-sm text-gray-500">Edit task</p>
-          <h2 class="text-2xl text-gray-900">
-            <%= @task.title %>
-          </h2>
-        </div>
+<div class="flex items-center justify-between">
+  <%= link_to project_path(@project),
+    class: "flex items-center gap-2 text-black hover:opacity-70 transition" do %>
+    
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 19l-7-7 7-7"/>
+    </svg>
 
-        <button
-          data-action="click->modal#close"
-          class="text-black hover:opacity-70 transition">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
+    <span>Back to project</span>
+  <% end %>
+</div>
+
+
+      </div>
+
+      <div class="space-y-1 border-b border-gray-200 pb-4">
+        <p class="text-sm text-gray-500">Edit task</p>
+        <h2 class="text-2xl text-gray-900"><%= @task.title %></h2>
       </div>
 
       <div class="space-y-6">
@@ -31,5 +34,4 @@
 
     </div>
   </div>
-
 </div>
