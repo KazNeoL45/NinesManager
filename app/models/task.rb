@@ -2,6 +2,8 @@ class Task < ApplicationRecord
   belongs_to :project
   belongs_to :column, optional: true
   belongs_to :user, optional: true
+  has_many :task_assignments, dependent: :destroy
+  has_many :assignees, through: :task_assignments, source: :user
 
   PRIORITIES = %w[low medium high urgent]
 

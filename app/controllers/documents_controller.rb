@@ -42,7 +42,7 @@ class DocumentsController < ApplicationController
   private
 
   def set_project
-    @project = current_user.owned_projects.find(params[:project_id])
+    @project = find_project
   end
 
   def set_document

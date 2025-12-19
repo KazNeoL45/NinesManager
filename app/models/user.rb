@@ -6,6 +6,8 @@ class User < ApplicationRecord
   has_many :project_members, dependent: :destroy
   has_many :projects, through: :project_members
   has_many :tasks, dependent: :nullify
+  has_many :task_assignments, dependent: :destroy
+  has_many :assigned_tasks, through: :task_assignments, source: :task
   has_many :documents, dependent: :destroy
 
   validates :name, presence: true

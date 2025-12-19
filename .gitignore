@@ -52,3 +52,8 @@ tmp/*
 tmp/cache/assets/
 tmp/cache/bootsnap/
 tmp/pids/server.pid
+
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
+

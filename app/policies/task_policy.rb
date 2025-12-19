@@ -8,15 +8,15 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def create?
-    project_accessible? && (user.admin? || user.editor?)
+    project_accessible?
   end
 
   def update?
-    project_accessible? && (user.admin? || user.editor?)
+    project_accessible?
   end
 
   def destroy?
-    project_accessible? && (user.admin? || user.editor?)
+    project_accessible?
   end
 
   def move?

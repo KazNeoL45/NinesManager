@@ -10,6 +10,13 @@ class Project < ApplicationRecord
 
   after_create :create_default_board
 
+  def assignable_users
+    user_ids = [user_id]
+    member_ids = members.pluck(:id)
+    user_ids += member_ids unless member_ids.empty?
+    User.where(id: user_ids.uniq)
+  end
+
   private
 
   def create_default_board

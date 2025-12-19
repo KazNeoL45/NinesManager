@@ -57,9 +57,15 @@
 
         <div class="space-y-2">
           <p class="text-sm text-gray-500">Assigned to</p>
-          <p class="text-gray-900">
-            <%= task.user&.email || "Unassigned" %>
-          </p>
+          <% if task.assignees.any? %>
+            <div class="space-y-1">
+              <% task.assignees.each do |assignee| %>
+                <p class="text-gray-900"><%= assignee.name %></p>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-gray-500">Unassigned</p>
+          <% end %>
         </div>
 
       </div>
