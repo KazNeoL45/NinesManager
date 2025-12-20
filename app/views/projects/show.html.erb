@@ -1,98 +1,180 @@
-<div class="space-y-6">
+<div class="space-y-10">
+
   <div class="flex justify-between items-start">
     <div>
-      <h1 class="text-3xl font-semibold text-gray-900"><%= @project.name %></h1>
+      <h1 class="text-3xl text-gray-900">
+        <%= @project.name %>
+      </h1>
       <% if @project.description.present? %>
-        <p class="text-gray-600 mt-2"><%= @project.description %></p>
+        <p class="text-gray-600 mt-2 max-w-2xl">
+          <%= @project.description %>
+        </p>
       <% end %>
     </div>
-    <div class="flex space-x-2">
-      <%= link_to "Edit", edit_project_path(@project), class: "px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition" %>
-      <%= button_to "Delete", @project, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-4 py-2 text-red-700 bg-white border border-red-300 rounded-lg hover:bg-red-50 transition" %>
+
+    <div class="flex gap-2">
+      <%= link_to "Edit",
+        edit_project_path(@project),
+        class: "px-4 py-2 rounded-xl bg-white/60 backdrop-blur border border-white/70 text-gray-700 hover:bg-white/80 transition" %>
+
+      <%= button_to "Delete",
+        @project,
+        method: :delete,
+        data: { turbo_confirm: "Are you sure?" },
+        class: "px-4 py-2 rounded-xl bg-white/60 backdrop-blur border border-white/70 text-red-600 hover:bg-white/80 transition" %>
     </div>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-      <div class="text-sm font-medium text-gray-500 mb-1">Tasks</div>
-      <div class="text-2xl font-semibold text-gray-900"><%= @tasks.count %></div>
+
+    <div class="rounded-2xl bg-white/50 backdrop-blur border border-white/60 p-6">
+      <p class="text-sm text-gray-600 mb-1">Tasks</p>
+      <p class="text-2xl text-gray-900"><%= @tasks.count %></p>
     </div>
-    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-      <div class="text-sm font-medium text-gray-500 mb-1">Boards</div>
-      <div class="text-2xl font-semibold text-gray-900"><%= @boards.count %></div>
+
+    <div class="rounded-2xl bg-white/50 backdrop-blur border border-white/60 p-6">
+      <p class="text-sm text-gray-600 mb-1">Boards</p>
+      <p class="text-2xl text-gray-900"><%= @boards.count %></p>
     </div>
-    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-      <div class="text-sm font-medium text-gray-500 mb-1">Documents</div>
-      <div class="text-2xl font-semibold text-gray-900"><%= @documents.count %></div>
+
+    <div class="rounded-2xl bg-white/50 backdrop-blur border border-white/60 p-6">
+      <p class="text-sm text-gray-600 mb-1">Documents</p>
+      <p class="text-2xl text-gray-900"><%= @documents.count %></p>
     </div>
-    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-      <div class="text-sm font-medium text-gray-500 mb-1">Members</div>
-      <div class="text-2xl font-semibold text-gray-900"><%= @project.members.count + 1 %></div>
+
+    <div class="rounded-2xl bg-white/50 backdrop-blur border border-white/60 p-6">
+      <p class="text-sm text-gray-600 mb-1">Members</p>
+      <p class="text-2xl text-gray-900"><%= @project.members.count + 1 %></p>
     </div>
+
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-        <h2 class="text-lg font-semibold text-gray-900">Tasks</h2>
-        <%= link_to "New Task", new_project_task_path(@project), class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
+
+    <div class="rounded-3xl bg-white/50 backdrop-blur border border-white/60 overflow-hidden">
+      <div class="px-6 py-4 border-b border-white/60 flex justify-between items-center">
+        <h2 class="text-lg text-gray-900">Tasks</h2>
+        <%= link_to "New Task", new_project_task_path(@project), class: "text-sm text-gray-700 hover:text-gray-900 transition" %>
       </div>
+
       <div class="p-6">
         <% if @tasks.any? %>
-          <div class="space-y-3">
+          <div class="space-y-4">
             <% @tasks.limit(5).each do |task| %>
-              <div class="border-l-4 <%= task.priority == 'urgent' ? 'border-red-500' : task.priority == 'high' ? 'border-orange-500' : task.priority == 'medium' ? 'border-yellow-500' : 'border-green-500' %> pl-3">
-                <div class="text-sm font-medium text-gray-900"><%= task.title %></div>
-                <div class="text-xs text-gray-500"><%= task.status.humanize %></div>
+              <div class="pl-3 border-l-2 <%= task.priority == 'urgent' ? 'border-red-400' : task.priority == 'high' ? 'border-orange-400' : task.priority == 'medium' ? 'border-yellow-400' : 'border-green-400' %>">
+                <p class="text-sm text-gray-900"><%= task.title %></p>
+                <p class="text-xs text-gray-500"><%= task.status.humanize %></p>
               </div>
             <% end %>
           </div>
         <% else %>
-          <p class="text-gray-500 text-sm">No tasks yet</p>
+          <p class="text-sm text-gray-500">No tasks yet</p>
         <% end %>
       </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-        <h2 class="text-lg font-semibold text-gray-900">Boards</h2>
-        <%= link_to "New Board", new_project_board_path(@project), class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
+    <div class="rounded-3xl bg-white/50 backdrop-blur border border-white/60 overflow-hidden">
+      <div class="px-6 py-4 border-b border-white/60 flex justify-between items-center">
+        <h2 class="text-lg text-gray-900">Boards</h2>
+        <%= link_to "New Board", new_project_board_path(@project), class: "text-sm text-gray-700 hover:text-gray-900 transition" %>
       </div>
+
       <div class="p-6">
         <% if @boards.any? %>
           <div class="space-y-3">
             <% @boards.each do |board| %>
-              <%= link_to project_board_path(@project, board), class: "block p-3 bg-gray-50 rounded hover:bg-gray-100 transition" do %>
-                <div class="text-sm font-medium text-gray-900"><%= board.name %></div>
-                <div class="text-xs text-gray-500"><%= pluralize(board.columns.count, 'column') %></div>
+              <%= link_to project_board_path(@project, board),
+                class: "block p-3 rounded-xl bg-white/60 hover:bg-white/80 transition" do %>
+                <p class="text-sm text-gray-900"><%= board.name %></p>
+                <p class="text-xs text-gray-500"><%= pluralize(board.columns.count, 'column') %></p>
               <% end %>
             <% end %>
           </div>
         <% else %>
-          <p class="text-gray-500 text-sm">No boards yet</p>
+          <p class="text-sm text-gray-500">No boards yet</p>
         <% end %>
       </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-        <h2 class="text-lg font-semibold text-gray-900">Documents</h2>
-        <%= link_to "New Document", new_project_document_path(@project), class: "text-sm text-indigo-600 hover:text-indigo-700 font-medium" %>
+    <div class="rounded-3xl bg-white/50 backdrop-blur border border-white/60 overflow-hidden">
+      <div class="px-6 py-4 border-b border-white/60 flex justify-between items-center">
+        <h2 class="text-lg text-gray-900">Documents</h2>
+        <%= link_to "New Document", new_project_document_path(@project), class: "text-sm text-gray-700 hover:text-gray-900 transition" %>
       </div>
+
       <div class="p-6">
         <% if @documents.any? %>
           <div class="space-y-3">
             <% @documents.limit(5).each do |document| %>
-              <%= link_to project_document_path(@project, document), class: "block p-3 bg-gray-50 rounded hover:bg-gray-100 transition" do %>
-                <div class="text-sm font-medium text-gray-900"><%= document.title %></div>
-                <div class="text-xs text-gray-500">By <%= document.user.name %></div>
+              <%= link_to project_document_path(@project, document),
+                class: "block p-3 rounded-xl bg-white/60 hover:bg-white/80 transition" do %>
+                <p class="text-sm text-gray-900"><%= document.title %></p>
+                <p class="text-xs text-gray-500">By <%= document.user.name %></p>
               <% end %>
             <% end %>
           </div>
         <% else %>
-          <p class="text-gray-500 text-sm">No documents yet</p>
+          <p class="text-sm text-gray-500">No documents yet</p>
         <% end %>
       </div>
     </div>
+
   </div>
+
+  <% if @project.user_id == current_user.id && current_user.admin? %>
+    <div class="rounded-3xl bg-white/50 backdrop-blur border border-white/60 overflow-hidden">
+      <div class="px-6 py-4 border-b border-white/60 flex justify-between items-center">
+        <h2 class="text-lg text-gray-900">Members</h2>
+      </div>
+
+      <div class="p-6">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between p-4 rounded-xl bg-white/60">
+            <div>
+              <p class="text-sm text-gray-900"><%= @project.user.name %></p>
+              <p class="text-xs text-gray-500">Owner</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs bg-indigo-100 text-indigo-700">Admin</span>
+          </div>
+
+          <% @project.project_members.includes(:user).each do |project_member| %>
+            <div class="flex items-center justify-between p-4 rounded-xl bg-white/60">
+              <div>
+                <p class="text-sm text-gray-900"><%= project_member.user.name %></p>
+                <p class="text-xs text-gray-500"><%= project_member.user.email %></p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="px-3 py-1 rounded-full text-xs bg-gray-100 text-gray-700"><%= project_member.role.capitalize %></span>
+                <%= button_to project_project_member_path(@project, project_member),
+                  method: :delete,
+                  data: { turbo_confirm: "Are you sure you want to remove this member?" },
+                  class: "px-3 py-1 rounded-lg text-xs text-red-600 hover:bg-red-50 transition" do %>
+                  Remove
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if @available_users.any? %>
+            <%= form_with model: [@project, @project.project_members.build], url: project_project_members_path(@project), class: "mt-6 p-4 rounded-xl bg-white/60 border border-gray-200" do |form| %>
+              <div class="space-y-4">
+                <div>
+                  <%= form.label :user_id, "Add Member", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                  <%= form.select :user_id, options_from_collection_for_select(@available_users, :id, :name), { prompt: "Select a user" }, class: "w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+                </div>
+
+                <div>
+                  <%= form.label :role, "Role", class: "block text-sm font-medium text-gray-700 mb-2" %>
+                  <%= form.select :role, options_for_select([['Editor', 'editor'], ['Viewer', 'viewer']], 'editor'), {}, class: "w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+                </div>
+
+                <%= form.submit "Add Member", class: "w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer" %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
 </div>

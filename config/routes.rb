@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       member do
         patch :move
       end
+      resources :task_assignments, only: [:create, :update, :destroy]
     end
     resources :boards do
       resources :columns, only: [:create, :update, :destroy]

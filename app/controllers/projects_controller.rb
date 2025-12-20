@@ -2,13 +2,18 @@ class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
   def index
-    @projects = current_user.owned_projects
+    @projects = current_user.owned_projects + current_user.projects
+    @projects.uniq!
   end
 
   def show
-    @tasks = @project.tasks.includes(:user, :column)
+    authorize @project
+    @tasks = @project.tasks.includes(:user, :column, :assignees)
     @boards = @project.boards.includes(:columns)
     @documents = @project.documents
+    if @project.user_id == current_user.id && current_user.admin?
+      @available_users = User.where.not(id: [@project.user_id] + @project.members.pluck(:id))
+    end
   end
 
   def new
@@ -43,7 +48,7 @@ class ProjectsController < ApplicationController
   private
 
   def set_project
-    @project = current_user.owned_projects.find(params[:id])
+    @project = Project.find(params[:id])
   end
 
   def project_params

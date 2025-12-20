@@ -1,30 +1,50 @@
-<div class="space-y-6">
+<div class="space-y-10">
+
   <div class="flex justify-between items-center">
-    <h1 class="text-3xl font-semibold text-gray-900">Projects</h1>
-    <%= link_to "New Project", new_project_path, class: "px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition" %>
+    <h1 class="text-3xl text-gray-900">
+      Projects
+    </h1>
+
+    <%= link_to new_project_path,
+      class: "px-5 py-3 rounded-xl bg-gray-900 text-white/90 hover:bg-gray-800 transition backdrop-blur" do %>
+      New Project
+    <% end %>
   </div>
 
   <% if @projects.any? %>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
       <% @projects.each do |project| %>
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition">
+        <div class="rounded-2xl bg-white/50 backdrop-blur border border-white/60 transition hover:bg-white/70">
           <%= link_to project, class: "block p-6" do %>
-            <h2 class="text-xl font-semibold text-gray-900 mb-2"><%= project.name %></h2>
+
+            <h2 class="text-lg text-gray-900 mb-2">
+              <%= project.name %>
+            </h2>
+
             <% if project.description.present? %>
-              <p class="text-gray-600 text-sm mb-4"><%= truncate(project.description, length: 100) %></p>
+              <p class="text-sm text-gray-600 mb-4">
+                <%= truncate(project.description, length: 100) %>
+              </p>
             <% end %>
-            <div class="flex justify-between items-center text-sm text-gray-500">
+
+            <div class="flex justify-between text-sm text-gray-500">
               <span><%= pluralize(project.tasks.count, 'task') %></span>
               <span><%= pluralize(project.boards.count, 'board') %></span>
             </div>
+
           <% end %>
         </div>
       <% end %>
+
     </div>
   <% else %>
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-      <p class="text-gray-500 mb-4">No projects yet</p>
-      <%= link_to "Create your first project", new_project_path, class: "text-indigo-600 hover:text-indigo-700 font-medium" %>
+    <div class="rounded-3xl bg-white/50 backdrop-blur border border-white/60 p-12 text-center">
+      <p class="text-gray-500 mb-3">
+        No projects yet
+      </p>
+      <%= link_to "Create your first project", new_project_path, class: "text-gray-900 hover:underline" %>
     </div>
   <% end %>
+
 </div>

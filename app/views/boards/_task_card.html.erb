@@ -10,7 +10,7 @@
       <p class="text-sm text-gray-600 mb-3"><%= truncate(task.description, length: 80) %></p>
     <% end %>
     
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center mb-2">
       <span class="px-2 py-1 text-xs font-medium rounded <%= task.priority == 'urgent' ? 'bg-red-100 text-red-800' : task.priority == 'high' ? 'bg-orange-100 text-orange-800' : task.priority == 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' %>">
         <%= task.priority %>
       </span>
@@ -18,5 +18,16 @@
         <span class="text-xs text-gray-500"><%= task.due_date.strftime('%b %d') %></span>
       <% end %>
     </div>
+    
+    <% if task.assignees.any? %>
+      <div class="flex items-center gap-1.5 mt-2 pt-2 border-t border-gray-100">
+        <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+        </svg>
+        <span class="text-xs text-gray-600 font-medium">
+          <%= task.assignees.map(&:name).join(', ') %>
+        </span>
+      </div>
+    <% end %>
   </div>
 <% end %>

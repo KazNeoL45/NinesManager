@@ -7,7 +7,7 @@ class BoardsController < ApplicationController
   end
 
   def show
-    @columns = @board.columns.includes(:tasks)
+    @columns = @board.columns.includes(tasks: :assignees)
   end
 
   def new
@@ -42,7 +42,7 @@ class BoardsController < ApplicationController
   private
 
   def set_project
-    @project = current_user.owned_projects.find(params[:project_id])
+    @project = find_project
   end
 
   def set_board

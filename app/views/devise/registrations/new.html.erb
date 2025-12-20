@@ -1,142 +1,87 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8 animate-fade-in">
-    <div class="bg-white rounded-2xl shadow-2xl p-8 transform transition-all duration-300 hover:shadow-3xl">
-      <div class="text-center">
-        <h2 class="text-4xl font-semibold text-gray-900 mb-2 animate-slide-down">Create Account</h2>
-        <p class="text-gray-600 animate-slide-down animation-delay-100">Join Nines Manager to start collaborating</p>
-      </div>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-100 via-purple-100 to-indigo-200 px-6">
+  <div class="w-full max-w-2xl">
 
-      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "mt-8 space-y-6" }) do |f| %>
+    <div class="backdrop-blur-xl bg-white/40 rounded-3xl shadow-xl border border-white/50 px-10 py-12 text-center">
+
+      <h2 class="text-4xl text-gray-900 mb-2">
+        Create Account
+      </h2>
+
+      <p class="text-gray-600 mb-10">
+        Join Nines Manager to start collaborating
+      </p>
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-8" }) do |f| %>
+
         <% if resource.errors.any? %>
-          <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg animate-shake">
-            <div class="flex">
-              <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                </svg>
-              </div>
-              <div class="ml-3">
-                <h3 class="text-sm font-medium text-red-800">
-                  <%= pluralize(resource.errors.count, "error") %> prohibited this account from being saved:
-                </h3>
-                <div class="mt-2 text-sm text-red-700">
-                  <ul class="list-disc list-inside space-y-1">
-                    <% resource.errors.full_messages.each do |message| %>
-                      <li><%= message %></li>
-                    <% end %>
-                  </ul>
-                </div>
-              </div>
-            </div>
+          <div class="rounded-2xl bg-white/60 backdrop-blur border border-white/70 p-4 text-left text-sm text-red-700">
+            <ul class="list-disc list-inside space-y-1">
+              <% resource.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
           </div>
         <% end %>
 
-        <div class="space-y-5">
-          <div class="transform transition-all duration-200 focus-within:scale-105">
-            <%= f.label :name, class: "block text-sm font-medium text-gray-700 mb-2" %>
-            <%= f.text_field :name, autofocus: true,
-                class: "appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200",
-                placeholder: "Enter your full name" %>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
+
+          <div>
+            <%= f.label :name, class: "block text-sm text-gray-700 mb-2" %>
+            <%= f.text_field :name,
+              autofocus: true,
+              placeholder: "Full name",
+              class: "w-full px-4 py-3 rounded-xl bg-white/60 border border-white/70 text-gray-900 placeholder-gray-500 focus:outline-none focus:bg-white/80 transition backdrop-blur" %>
           </div>
 
-          <div class="transform transition-all duration-200 focus-within:scale-105">
-            <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-2" %>
-            <%= f.email_field :email, autocomplete: "email",
-                class: "appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200",
-                placeholder: "Enter your email" %>
+          <div>
+            <%= f.label :email, class: "block text-sm text-gray-700 mb-2" %>
+            <%= f.email_field :email,
+              autocomplete: "email",
+              placeholder: "Email address",
+              class: "w-full px-4 py-3 rounded-xl bg-white/60 border border-white/70 text-gray-900 placeholder-gray-500 focus:outline-none focus:bg-white/80 transition backdrop-blur" %>
           </div>
 
-          <div class="transform transition-all duration-200 focus-within:scale-105">
-            <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-2" do %>
-              Password
-              <% if @minimum_password_length %>
-                <span class="text-xs text-gray-500">(<%= @minimum_password_length %> characters minimum)</span>
-              <% end %>
-            <% end %>
-            <%= f.password_field :password, autocomplete: "new-password",
-                class: "appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200",
-                placeholder: "Create a password" %>
+          <div>
+            <%= f.label :password, class: "block text-sm text-gray-700 mb-2" %>
+            <%= f.password_field :password,
+              autocomplete: "new-password",
+              placeholder: "Password",
+              class: "w-full px-4 py-3 rounded-xl bg-white/60 border border-white/70 text-gray-900 placeholder-gray-500 focus:outline-none focus:bg-white/80 transition backdrop-blur" %>
           </div>
 
-          <div class="transform transition-all duration-200 focus-within:scale-105">
-            <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700 mb-2" %>
-            <%= f.password_field :password_confirmation, autocomplete: "new-password",
-                class: "appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200",
-                placeholder: "Confirm your password" %>
+          <div>
+            <%= f.label :password_confirmation, class: "block text-sm text-gray-700 mb-2" %>
+            <%= f.password_field :password_confirmation,
+              autocomplete: "new-password",
+              placeholder: "Confirm password",
+              class: "w-full px-4 py-3 rounded-xl bg-white/60 border border-white/70 text-gray-900 placeholder-gray-500 focus:outline-none focus:bg-white/80 transition backdrop-blur" %>
           </div>
 
-          <div class="transform transition-all duration-200 focus-within:scale-105">
-            <%= f.label :role, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <div class="md:col-span-2">
+            <%= f.label :role, class: "block text-sm text-gray-700 mb-2" %>
             <%= f.select :role,
-                options_for_select([['Editor', 'editor'], ['Admin', 'admin'], ['Viewer', 'viewer']], 'editor'),
-                {},
-                class: "appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200" %>
+              options_for_select([['Editor', 'editor'], ['Admin', 'admin'], ['Viewer', 'viewer']], 'editor'),
+              {},
+              class: "w-full px-4 py-3 rounded-xl bg-white/60 border border-white/70 text-gray-900 focus:outline-none focus:bg-white/80 transition backdrop-blur" %>
           </div>
+
         </div>
 
-        <div>
-          <%= f.submit "Create Account", class: "group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transform transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer" %>
-        </div>
+        <%= f.submit "Create Account",
+          class: "w-full mt-10 py-3 rounded-xl bg-gray-900 text-white/90 hover:bg-gray-800 transition backdrop-blur" %>
 
-        <div class="text-center">
-          <p class="text-sm text-gray-600">
-            Already have an account?
-            <%= link_to "Sign in", new_session_path(resource_name), class: "font-semibold text-purple-600 hover:text-purple-500 transition-colors duration-200" %>
-          </p>
-        </div>
+        <p class="text-sm text-gray-600 mt-8">
+          Already have an account?
+          <%= link_to "Sign in", new_session_path(resource_name), class: "text-gray-900 hover:underline" %>
+        </p>
+
       <% end %>
+
     </div>
 
-    <div class="text-center animate-fade-in animation-delay-200">
-      <%= link_to "← Back to Home", root_path, class: "text-gray-600 hover:text-gray-900 transition-colors duration-200 text-sm" %>
+    <div class="text-center mt-6">
+      <%= link_to "← Back to Home", root_path, class: "text-sm text-gray-600 hover:text-gray-900 transition" %>
     </div>
+
   </div>
 </div>
-
-<style>
-  @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes slide-down {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.6s ease-out;
-  }
-
-  .animate-slide-down {
-    animation: slide-down 0.6s ease-out;
-  }
-
-  .animate-shake {
-    animation: shake 0.5s ease-out;
-  }
-
-  .animation-delay-100 {
-    animation-delay: 0.1s;
-    opacity: 0;
-    animation-fill-mode: forwards;
-  }
-
-  .animation-delay-200 {
-    animation-delay: 0.2s;
-    opacity: 0;
-    animation-fill-mode: forwards;
-  }
-</style>

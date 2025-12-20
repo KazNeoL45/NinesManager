@@ -1,6 +1,6 @@
 module NinesManager
   class Application
-    VERSION = "0.5.0"
+    VERSION = "0.7.0 | Ayane Rev"
     BETA = true
     STATUS = BETA ? "beta" : "live"
 
