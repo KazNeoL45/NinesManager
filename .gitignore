@@ -1,18 +1,14 @@
-# Terraform
+
 terraform/.terraform/
 terraform/**/*.tfstate
 terraform/**/*.tfstate.*
 terraform/**/*.tfvars
 terraform/**/*.tfplan
 terraform/**/.terraform.lock.hcl
-
-# Ansible
 ansible/**/*.retry
 ansible/**/vault.yml
 ansible/**/group_vars/vault.yml
 ansible/**/terraform_outputs.json
-
-# Environment files
 .env
 .env.local
 .env.production
