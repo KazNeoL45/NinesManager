@@ -63,7 +63,10 @@ class TasksController < ApplicationController
 
   def move
     authorize @task, :move?
-    if @task.update(column_id: params[:column_id], position: params[:position])
+    update_params = { column_id: params[:column_id] }
+    update_params[:position] = params[:position] if params[:position].present?
+    
+    if @task.update(update_params)
       head :ok
     else
       head :unprocessable_entity
