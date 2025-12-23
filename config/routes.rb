@@ -11,10 +11,15 @@ Rails.application.routes.draw do
   get 'settings', to: 'settings#index', as: :settings
   get 'about', to: 'pages#about', as: :about
 
+  resources :conversations, only: [:index, :show, :create] do
+    resources :messages, only: [:create, :destroy]
+  end
+
   resources :projects do
     resources :tasks do
       member do
         patch :move
+        delete 'documents/:document_id', action: :remove_document, as: :remove_document
       end
       resources :task_assignments, only: [:create, :update, :destroy]
     end

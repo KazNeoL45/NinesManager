@@ -7,6 +7,7 @@ class PagesController < ApplicationController
 
   def about
     @version = NinesManager::Application.version
+    @status_display = NinesManager::Application.status_display
     @status = SystemStatus.new
   end
 end

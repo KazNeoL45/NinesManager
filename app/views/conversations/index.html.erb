@@ -1,0 +1,136 @@
+<div style="display: flex; flex-direction: column; height: 100vh; width: 100%; background: #fff;">
+
+  <header style="height: 56px; min-height: 56px; padding: 0 16px; border-bottom: 1px solid #e5e7eb; background: #fff; display: flex; align-items: center; gap: 16px;">
+    <%= link_to dashboard_path, style: "display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; color: #6b7280; border-radius: 8px; text-decoration: none;" do %>
+      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    <% end %>
+    <h1 style="font-size: 18px; font-weight: 600; color: #111827; margin: 0;">Direct Messages</h1>
+    <div style="flex: 1; max-width: 400px; position: relative;">
+      <svg width="16" height="16" fill="none" stroke="#9ca3af" viewBox="0 0 24 24" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input type="text" id="conversation-search" placeholder="Search conversations..." oninput="filterConversations(this.value)" style="width: 100%; height: 36px; padding: 0 12px 0 40px; font-size: 14px; background: #f3f4f6; border: none; border-radius: 8px; outline: none; color: #374151;">
+    </div>
+    <button onclick="document.getElementById('new-conversation-modal').classList.remove('hidden')" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; color: #6b7280; border-radius: 8px; background: none; border: none; cursor: pointer;">
+      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+    </button>
+  </header>
+
+  <div style="display: flex; flex: 1; overflow: hidden;">
+
+    <aside style="width: 300px; min-width: 300px; border-right: 1px solid #e5e7eb; background: #fff; overflow-y: auto;">
+      <% if @conversations.any? %>
+        <% @conversations.each do |conversation| %>
+          <% other_participant = conversation.other_participant(current_user) %>
+          <% last_message = conversation.last_message %>
+          <% unread_count = conversation.unread_count_for(current_user) %>
+          <%= link_to conversation_path(conversation), class: "conversation-item", data: { name: other_participant&.name&.downcase || '' }, style: "display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; border-bottom: 1px solid #f3f4f6;" do %>
+            <div style="position: relative; flex-shrink: 0;">
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; font-weight: 500;">
+                <%= other_participant&.name&.first&.upcase || '?' %>
+              </div>
+              <% if other_participant&.online? %>
+                <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; border-radius: 50%; background: #22c55e; border: 2px solid #fff;"></div>
+              <% elsif other_participant&.away? %>
+                <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; border-radius: 50%; background: #eab308; border: 2px solid #fff;"></div>
+              <% end %>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 14px; font-weight: 500; color: #111827; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= other_participant&.name || 'Unknown User' %></span>
+                <% if last_message %>
+                  <span style="font-size: 12px; color: #9ca3af; flex-shrink: 0; margin-left: 8px;"><%= time_ago_in_words(last_message.created_at) %></span>
+                <% end %>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2px;">
+                <% if last_message %>
+                  <span style="font-size: 13px; color: <%= unread_count > 0 ? '#374151; font-weight: 500' : '#6b7280' %>; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= last_message.content.presence || (last_message.attachments.attached? ? "📎 Attachment" : "") %></span>
+                <% else %>
+                  <span style="font-size: 13px; color: #9ca3af; font-style: italic;">No messages yet</span>
+                <% end %>
+                <% if unread_count > 0 %>
+                  <span style="margin-left: 8px; padding: 2px 6px; border-radius: 9999px; background: #6366f1; color: #fff; font-size: 11px; font-weight: 500;"><%= unread_count > 99 ? '99+' : unread_count %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% else %>
+        <div style="padding: 48px 16px; text-align: center;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: #f3f4f6; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+            <svg width="24" height="24" fill="none" stroke="#9ca3af" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+          </div>
+          <p style="font-size: 14px; color: #6b7280; margin: 0 0 8px 0;">No conversations yet</p>
+          <button onclick="document.getElementById('new-conversation-modal').classList.remove('hidden')" style="font-size: 14px; color: #6366f1; font-weight: 500; background: none; border: none; cursor: pointer;">Start a conversation</button>
+        </div>
+      <% end %>
+    </aside>
+
+    <main style="flex: 1; display: flex; align-items: center; justify-content: center; background: #f9fafb;">
+      <div style="text-align: center;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+          <svg width="32" height="32" fill="none" stroke="#9ca3af" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+          </svg>
+        </div>
+        <p style="font-size: 15px; color: #6b7280; margin: 0;">Select a conversation to start messaging</p>
+      </div>
+    </main>
+
+  </div>
+
+</div>
+
+<div id="new-conversation-modal" class="hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+  <div style="background: #fff; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); width: 100%; max-width: 400px; margin: 16px;">
+    <div style="padding: 16px 24px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
+      <h2 style="font-size: 18px; font-weight: 600; color: #111827; margin: 0;">New Message</h2>
+      <button onclick="document.getElementById('new-conversation-modal').classList.add('hidden')" style="padding: 6px; color: #9ca3af; border-radius: 8px; background: none; border: none; cursor: pointer;">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div style="padding: 24px;">
+      <%= form_with url: conversations_path, method: :post, local: true do |form| %>
+        <div style="margin-bottom: 16px;">
+          <label for="user_id" style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">To:</label>
+          <%= select_tag :user_id, options_from_collection_for_select(@available_users, :id, :name), prompt: "Select a user...", style: "width: 100%; height: 40px; padding: 0 12px; font-size: 14px; border: 1px solid #d1d5db; border-radius: 8px; color: #111827; background: #fff;" %>
+        </div>
+        <div style="display: flex; gap: 12px; padding-top: 8px;">
+          <button type="button" onclick="document.getElementById('new-conversation-modal').classList.add('hidden')" style="flex: 1; height: 40px; font-size: 14px; font-weight: 500; color: #374151; background: #fff; border: 1px solid #d1d5db; border-radius: 8px; cursor: pointer;">Cancel</button>
+          <%= form.submit "Start Conversation", style: "flex: 1; height: 40px; font-size: 14px; font-weight: 500; color: #fff; background: #6366f1; border: none; border-radius: 8px; cursor: pointer;" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hidden { display: none !important; }
+  input:focus { background: #fff !important; box-shadow: 0 0 0 2px #6366f1; }
+  a.conversation-item:hover { background: #f9fafb; }
+  button:hover { background: #f3f4f6; }
+</style>
+
+<script>
+  function filterConversations(query) {
+    const items = document.querySelectorAll('.conversation-item');
+    const searchTerm = query.toLowerCase().trim();
+    
+    items.forEach(item => {
+      const name = item.dataset.name || '';
+      if (searchTerm === '' || name.includes(searchTerm)) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+</script>
