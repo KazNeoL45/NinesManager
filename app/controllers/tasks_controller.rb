@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_project
-  before_action :set_task, only: [:show, :edit, :update, :destroy, :move]
+  before_action :set_task, only: [:show, :edit, :update, :destroy, :move, :remove_document]
 
   def index
     @tasks = @project.tasks.includes(:user, :column, :assignees)
@@ -46,13 +46,24 @@ class TasksController < ApplicationController
   def update
     authorize @task
     if @task.update(task_params)
-      redirect_to project_board_path(@project, @task.column.board), notice: 'Task updated successfully.'
+      if params[:task][:documents].present?
+        redirect_to project_task_path(@project, @task), notice: 'Documents attached successfully.'
+      else
+        redirect_to project_board_path(@project, @task.column.board), notice: 'Task updated successfully.'
+      end
     else
       respond_to do |format|
         format.html { render :edit, status: :unprocessable_entity }
         format.turbo_stream { render turbo_stream: turbo_stream.replace("editTaskModal", partial: "form", locals: { project: @project, task: @task }) }
       end
     end
+  end
+
+  def remove_document
+    authorize @task
+    attachment = @task.documents.find(params[:document_id])
+    attachment.purge
+    redirect_to project_task_path(@project, @task), notice: 'Document removed successfully.', status: :see_other
   end
 
   def destroy
@@ -63,7 +74,10 @@ class TasksController < ApplicationController
 
   def move
     authorize @task, :move?
-    if @task.update(column_id: params[:column_id], position: params[:position])
+    update_params = { column_id: params[:column_id] }
+    update_params[:position] = params[:position] if params[:position].present?
+    
+    if @task.update(update_params)
       head :ok
     else
       head :unprocessable_entity
@@ -81,6 +95,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :status, :priority, :due_date, :column_id, :recurring, :recurrence_pattern)
+    params.require(:task).permit(:title, :description, :status, :priority, :due_date, :column_id, :recurring, :recurrence_pattern, documents: [])
   end
 end

@@ -23,6 +23,10 @@ class TaskPolicy < ApplicationPolicy
     update?
   end
 
+  def remove_document?
+    update?
+  end
+
   private
 
   def project_accessible?

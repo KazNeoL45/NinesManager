@@ -4,14 +4,17 @@ class Task < ApplicationRecord
   belongs_to :user, optional: true
   has_many :task_assignments, dependent: :destroy
   has_many :assignees, through: :task_assignments, source: :user
+  has_many_attached :documents
 
   PRIORITIES = %w[low medium high urgent]
 
   validates :title, presence: true
   validates :status, inclusion: { in: %w[todo in_progress done] }, allow_blank: true
   validates :priority, inclusion: { in: PRIORITIES }, allow_blank: true
+  validate :documents_count_within_limit
 
   before_validation :set_defaults, on: :create
+  before_save :sync_status_with_column, if: :column_id_changed?
 
   scope :recurring, -> { where(recurring: true) }
   scope :non_recurring, -> { where(recurring: false) }
@@ -23,5 +26,24 @@ class Task < ApplicationRecord
     self.status ||= 'todo'
     self.priority ||= 'medium'
     self.recurring ||= false
+  end
+
+  def sync_status_with_column
+    return unless column
+
+    column_name = column.name.downcase
+    if column_name.include?('done')
+      self.status = 'done'
+    elsif column_name.include?('progress') || column_name.include?('in progress')
+      self.status = 'in_progress'
+    elsif column_name.include?('todo') || column_name.include?('to do')
+      self.status = 'todo'
+    end
+  end
+
+  def documents_count_within_limit
+    if documents.count > 5
+      errors.add(:documents, "cannot exceed 5 files")
+    end
   end
 end

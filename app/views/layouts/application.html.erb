@@ -10,23 +10,29 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="h-full <%= user_signed_in? ? 'bg-gray-50' : '' %>">
-    <%= render 'shared/navbar' if user_signed_in? %>
+  <body class="<%= request.path.start_with?('/conversations') ? 'h-screen overflow-hidden' : 'min-h-screen' %> <%= user_signed_in? && !request.path.start_with?('/conversations') ? 'bg-gray-50' : 'bg-white' %>">
+    <% unless request.path.start_with?('/conversations') %>
+      <%= render 'shared/navbar' if user_signed_in? %>
 
-    <% if notice.present? %>
-      <div class="bg-green-50 border-l-4 border-green-400 p-4 max-w-7xl mx-auto mt-4 <%= user_signed_in? ? 'mx-4' : '' %>">
-        <p class="text-green-700"><%= notice %></p>
-      </div>
+      <% if notice.present? %>
+        <div class="bg-green-50 border-l-4 border-green-400 p-4 max-w-7xl mx-auto mt-4 <%= user_signed_in? ? 'mx-4' : '' %>">
+          <p class="text-green-700"><%= notice %></p>
+        </div>
+      <% end %>
+
+      <% if alert.present? %>
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 max-w-7xl mx-auto mt-4 <%= user_signed_in? ? 'mx-4' : '' %>">
+          <p class="text-red-700"><%= alert %></p>
+        </div>
+      <% end %>
+
+      <main class="<%= user_signed_in? ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8' : '' %>">
+        <%= yield %>
+      </main>
+    <% else %>
+      <main class="h-screen w-screen">
+        <%= yield %>
+      </main>
     <% end %>
-
-    <% if alert.present? %>
-      <div class="bg-red-50 border-l-4 border-red-400 p-4 max-w-7xl mx-auto mt-4 <%= user_signed_in? ? 'mx-4' : '' %>">
-        <p class="text-red-700"><%= alert %></p>
-      </div>
-    <% end %>
-
-    <main class="<%= user_signed_in? ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8' : '' %>">
-      <%= yield %>
-    </main>
   </body>
 </html>

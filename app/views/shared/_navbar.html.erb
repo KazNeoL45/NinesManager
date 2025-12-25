@@ -6,6 +6,15 @@
         <div class="hidden sm:ml-2 sm:flex sm:space-x-8">
           <%= link_to "Dashboard", dashboard_path, class: "inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 border-b-2 #{current_page?(dashboard_path) ? 'border-indigo-500' : 'border-transparent hover:border-gray-300'}" %>
           <%= link_to "Projects", projects_path, class: "inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 border-b-2 #{current_page?(projects_path) ? 'border-indigo-500' : 'border-transparent hover:border-gray-300'}" %>
+          <%= link_to conversations_path, class: "inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 border-b-2 #{request.path.start_with?('/conversations') ? 'border-indigo-500' : 'border-transparent hover:border-gray-300'}" do %>
+            Messages
+            <% total_unread = current_user.conversations.sum { |c| c.unread_count_for(current_user) } %>
+            <% if total_unread > 0 %>
+              <span class="ml-2 px-2 py-0.5 rounded-full bg-indigo-600 text-white text-xs font-semibold">
+                <%= total_unread > 99 ? '99+' : total_unread %>
+              </span>
+            <% end %>
+          <% end %>
         </div>
       </div>
       <div class="flex items-center space-x-2">

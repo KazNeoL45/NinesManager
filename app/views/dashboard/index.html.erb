@@ -39,7 +39,7 @@
       <div class="flex justify-between items-center">
         <div>
           <p class="text-sm text-gray-600 mb-2">Active Tasks</p>
-          <p class="text-4xl text-gray-900"><%= @recent_tasks.count %></p>
+          <p class="text-4xl text-gray-900"><%= @assigned_tasks.where.not(status: 'done').count %></p>
         </div>
         <div class="p-3 rounded-xl bg-white/60">
           <svg class="w-7 h-7 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +53,7 @@
       <div class="flex justify-between items-center">
         <div>
           <p class="text-sm text-gray-600 mb-2">Completed</p>
-          <p class="text-4xl text-gray-900"><%= @recent_tasks.where(status: 'done').count %></p>
+          <p class="text-4xl text-gray-900"><%= @completed_tasks.count %></p>
         </div>
         <div class="p-3 rounded-xl bg-white/60">
           <svg class="w-7 h-7 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
